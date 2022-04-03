@@ -15,16 +15,17 @@ jobs:
       - name: Print env
         run: |
           env
-      - name: print tag
+      - name: Get tag
         run: |
           tag=$(echo ${{ github.ref }} | cut -d/ -f3)
-          echo $tag
-#      - name: Docker Build and Push
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          platforms: linux/amd64
-#          push: false
-#          tags: |
-#            ghcr.io/codenotary/immuproof:${{ github.ref }}
-#            ghcr.io/codenotary/immuproof:latest
+          echo '::set-output name=TAG::$tag'
+        id: get_tag
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+          tags: |
+            ghcr.io/codenotary/immuproof:${{ steps.get_tag.outputs.TAG }}
+            ghcr.io/codenotary/immuproof:latest
