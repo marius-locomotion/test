@@ -12,9 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: print tag
+      - name: Print env
         run: |
-          echo ${{ github.ref }}
+          env
+      - name: print tag
+        bash: |
+          tag=(echo ${{ github.ref | cut -d/ -f3 }})
+          echo $tag
 #      - name: Docker Build and Push
 #        uses: docker/build-push-action@v2
 #        with:
